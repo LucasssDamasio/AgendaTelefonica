@@ -1,12 +1,13 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, TextInput } from "react-native";
 
-const TextInputA = () => {
-  const [text, onChangeText] = React.useState("Digite aqui.....");
+const TextInputA = ({text, onChangeText, placeholder}) => {
+  
 
   return (
     <SafeAreaView>
       <TextInput
+        placeholder={placeholder}
         style={styles.input}
         onChangeText={onChangeText}
         value={text}
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     margin: 12,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     padding: 10,
   },
 });

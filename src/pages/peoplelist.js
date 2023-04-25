@@ -1,45 +1,83 @@
-import React from "react";
-import { View, Text, StyleSheet, Button, TouchableOpacity , SearchBar } from "react-native";
-import TextInputA from "../components/textinput";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
+import Header from "../components/header";
+import { getAllContacts } from "../storage/AsyncStorage";
+import { useIsFocused } from "@react-navigation/native";
+import { SearchBar } from "react-native-screens";
 
-const PeopleList = (prop) => {
-  const names = [" Lucas Damasio", "Yago Frossard", "Arthur Moura "];
-  const clickHandler = () => {
-    alert("Botão Clicado");
+const PeopleList = ({ navigation }) => {
+  const IsFocused = useIsFocused();
+  const [contatos, setcontatos] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    getAllContacts().then((response) => {
+      setcontatos(response);
+    });
+  }, [IsFocused]);
+  const MudaTelaEdita = () => {
+    navigation.navigate("EditUser");
   };
+  const MudaTelaVisualiza = (contato) => {
+    navigation.navigate("UserView", { id: contato.id });
+  };
+
+  // const handleSearch = (text) => {
+  //   setSearchText(text);
+  // };
+
+  //  const filteredContacts = contato.filter(
+  //    (contato) => contato.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+  //  );
 
   return (
     <>
+      <Header title="Agenda Telefonica" />
       <View>
-        <TouchableOpacity style={style.button} onPress={clickHandler}>
+        {/* <SearchBar onSearch={handleSearch} />
+      <FlatList
+        data={filteredContacts}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ContactItem contact={item} />}
+      /> */}
+
+        <TouchableOpacity style={style.button} onPress={MudaTelaEdita}>
           <Text>Adicionar Contato</Text>
         </TouchableOpacity>
       </View>
-      {names.map((name, index) => {
+      {contatos.map((contato, index) => {
         return (
-          <View key={index} style={style.line}>
-            <Text style={style.lineText}>{name}</Text>
-          </View>
+          <TouchableOpacity
+            key={index}
+            style={style.line}
+            onPress={() => MudaTelaVisualiza(contato)}
+          >
+            <Text style={style.lineText}>
+              {contato.textnome + " " + contato.textsobrenome}
+            </Text>
+          </TouchableOpacity>
         );
       })}
-      <View>
-         <TextInputA></TextInputA>
-      </View>
     </>
   );
 };
 const style = StyleSheet.create({
   button: {
-    alignItems: "center",
+    aligncontato: "center",
     backgroundColor: "#A9A9A9",
     padding: 10,
-    height:40,
-    borderRadius:15
-    
+    height: 40,
+    borderRadius: 15,
   },
   line: {
     height: 60,
-    alignItems: "center",
+    aligncontato: "center",
     flexDirection: "row",
     textAlign: "center",
     width: "100%",
