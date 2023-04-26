@@ -15,6 +15,7 @@ import {
   getContactById,
   updateContact,
 } from "../storage/AsyncStorage";
+import * as ImagePicker from "expo-image-picker";
 
 const EditUser = ({ route, navigation }) => {
   const { id } = route.params || {};
@@ -26,10 +27,12 @@ const EditUser = ({ route, navigation }) => {
   const [texttelefone, setTextTelefone] = useState([{ numero: "" }]);
   const [textemail, setTextEmail] = useState([{ email: "" }]);
   const [textendereco, setTextEndereco] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     if (id) {
       getContactById(id).then((response) => {
+        setSelectedImage(response.foto);
         setTextNome(response.textnome);
         setTextSobrenome(response.textsobrenome);
         setTextTelefone(response.texttelefone);
@@ -100,6 +103,7 @@ const EditUser = ({ route, navigation }) => {
         texttelefone,
         textemail,
         textendereco,
+        foto: selectedImage,
       };
       await addContact(contato);
       navigation.goBack();
@@ -111,19 +115,38 @@ const EditUser = ({ route, navigation }) => {
         texttelefone,
         textemail,
         textendereco,
+        foto: selectedImage,
       };
       await updateContact(contato);
       navigation.goBack();
     }
   }
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      alert("Tu nao selecionou foto");
+    }
+  };
 
   return (
     <ScrollView style={style.container}>
       <View style={style.cabecalho}>
-        <Image
-          source={require("../assets/addUserIcon.png")}
-          style={style.adduser}
-        />
+        <TouchableOpacity onPress={pickImageAsync}>
+          {selectedImage ? (
+            <Image source={{ uri: selectedImage }} style={style.adduser} />
+          ) : (
+            <Image
+              source={require("../assets/addUserIcon.png")}
+              style={style.adduser}
+            />
+          )}
+        </TouchableOpacity>
         <TouchableOpacity style={style.button2} onPress={clickSaver}>
           <Text style={style.line}>Salvar</Text>
         </TouchableOpacity>

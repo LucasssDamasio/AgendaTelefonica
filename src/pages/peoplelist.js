@@ -10,6 +10,7 @@ import Header from "../components/header";
 import { getAllContacts } from "../storage/AsyncStorage";
 import { useIsFocused } from "@react-navigation/native";
 import { SearchBar } from "react-native-screens";
+import * as ImagePicker from 'expo-image-picker';
 
 const PeopleList = ({ navigation }) => {
   const IsFocused = useIsFocused();

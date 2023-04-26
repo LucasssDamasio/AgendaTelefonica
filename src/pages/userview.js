@@ -54,10 +54,17 @@ const UserView = ({ route, navigation }) => {
               </TouchableOpacity>
             </View>
 
-            <Image
-              source={require("../assets/user.png")}
-              style={style.usericon}
-            />
+            {contato.foto ? (
+              <Image
+                source={{ uri: contato.foto }}
+                style={style.usericonfoto}
+              />
+            ) : (
+              <Image
+                source={require("../assets/user.png")}
+                style={style.usericon}
+              />
+            )}
             <Text style={style.lineText}>
               {contato.textnome + " " + contato.textsobrenome}
             </Text>
@@ -130,6 +137,11 @@ const style = StyleSheet.create({
   usericon: {
     width: 200,
     height: 200,
+  },
+  usericonfoto: {
+    width: 200,
+    height: 200,
+    borderRadius: 200 / 2,
   },
   lineText: {
     color: "#fff",

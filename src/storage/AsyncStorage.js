@@ -24,6 +24,7 @@ export const getContactById = async (id) => {
 
 export const addContact = async (newContact) => {
   try {
+    console.log(newContact);
     const contacts = await getAllContacts();
     contacts.push(newContact);
     await AsyncStorage.setItem("contatos", JSON.stringify(contacts));
